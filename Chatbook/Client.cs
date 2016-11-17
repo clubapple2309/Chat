@@ -17,7 +17,8 @@ namespace Chatbook
         StreamWriter writer;
         User user;
         string clientName;
-        public Client(TcpClient client,Server server)
+
+        public Client(TcpClient client, Server server)
         {
             this.client = client;
             this.server = server;
@@ -25,7 +26,8 @@ namespace Chatbook
 
         public void ListenerForClient()
         {
-            try {
+            try
+            {
                 stream = client.GetStream();
                 while (true)
                 {
@@ -52,13 +54,14 @@ namespace Chatbook
                         continue;
                     }
                     Console.WriteLine("Обрабатываеться {0} ", answer[1]);
-                } 
-            }catch (Exception ex)
+                }
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 Server.SendMessage(clientName + " отключился от чата ", clientName);
             }
-            finally 
+            finally
             {
                 Server.RemoveConnection(this.clientName);
                 Close();
@@ -67,10 +70,10 @@ namespace Chatbook
 
         public void Registration(string[] info)
         {
-            if (Server.clients.Count==0 || Server.clients.Any(x => x.Name != info[1]))
+            if (Server.clients.Count == 0 || Server.clients.Any(x => x.Name != info[1]))
             {
-            user = new User(client,server,info[1],info[2],writer, reader);
-            writer.WriteLine("Регистрация прошла успешно");
+                user = new User(client, server, info[1], info[2], writer, reader);
+                writer.WriteLine("Регистрация прошла успешно");
             }
             else
             {
@@ -78,19 +81,19 @@ namespace Chatbook
             }
             writer.Flush();
         }
-    
+
         public void Login(string[] info)
         {
-            bool loginSuccess=false;
-            
-                foreach(var client1 in Server.cl)
+            bool loginSuccess = false;
+
+            foreach (var client1 in BetterThenSQL.dateClients)
+            {
+                if (client1.Key == info[1] && client1.Value == info[2])
                 {
-                    if (client1.Key == info[1] && client1.Value == info[2])
-                    {
                     user = new User(client, server, info[1], info[2], writer, reader);
                     loginSuccess = true;
-                    }
                 }
+            }
             if (!loginSuccess)
             {
                 foreach (var client1 in Server.clients)
@@ -102,18 +105,19 @@ namespace Chatbook
 
                 }
             }
-                if (loginSuccess)
-                {
-                    writer.WriteLine("success");
-                    writer.Flush();
-                Server.SendMessage(info[1]+" подключился к чату ",info[1]);
-                }
-                else
-                {
-                    writer.WriteLine("Не верный логин или пароль ...");
-                    writer.Flush();
-                }
-           }
+            if (loginSuccess)
+            {
+                writer.WriteLine("success");
+                writer.Flush();
+                Server.SendMessage(info[1] + " подключился к чату ", info[1]);
+            }
+            else
+            {
+                writer.WriteLine("Не верный логин или пароль ...");
+                writer.Flush();
+            }
+        }
+
         public void Close()
         {
             if (stream != null)

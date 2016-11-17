@@ -9,8 +9,9 @@ namespace ChatbookUser
     class Program
     {
         static void Main(string[] args)
-        { 
-            User.ChatStart();
+        {
+            User user = new User();
+            user.ChatStart();
         }
     }
 }

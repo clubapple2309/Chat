@@ -13,10 +13,11 @@ namespace Chatbook
         static Server server;
         static void Main(string[] args)
         {
+            BetterThenSQL context = new BetterThenSQL();
+            context.ReadFromBd();
             server = new Server();
             threadListener = new Thread(server.Starting);
             threadListener.Start();
-            Server.ReadFromBd();
         }
     }
 }

@@ -12,18 +12,18 @@ namespace ChatbookUser
 {
     class User
     {
-        static TcpClient client;
-        static NetworkStream stream;
-        private static string Ip = "127.251.251.5";
-        private static int port = 8888;
-        static string regOrLogin, userName, userPassword, checkPassword;
-        static string info;
-        static string message;
-        static StreamWriter writer;
-        static StreamReader reader;
-        static Thread reciveThread;
+        private string Ip = "127.251.251.5";
+        private int port = 8888;
+        string regOrLogin, userName, userPassword, checkPassword;
+        string info;
+        string message;
+        TcpClient client;
+        NetworkStream stream;
+        StreamWriter writer;
+        StreamReader reader;
+        Thread reciveThread;
 
-        public static void ChatStart()
+        public void ChatStart()
         {
             try
             {
@@ -41,14 +41,14 @@ namespace ChatbookUser
                 Console.ReadLine();
             }
         }
-        public static void Chating()
+        public void Chating()
         {
             try
             {
                 do
                 {
-                Console.WriteLine("Нажмите Y что бы залогиниться. N для регистрации. (Y or N) ");
-                regOrLogin = Console.ReadLine();
+                    Console.WriteLine("Нажмите Y что бы залогиниться. N для регистрации. (Y or N) ");
+                    regOrLogin = Console.ReadLine();
                     if (regOrLogin == "Y" || regOrLogin == "y" || message == "regSuccess")
                     {
                         Console.WriteLine("Авторизуйтесь пожалуйста ");
@@ -95,35 +95,35 @@ namespace ChatbookUser
             }
         }
 
-        static void ReadMessage()
+        void ReadMessage()
         {
             while (true)
             {
-            reader = new StreamReader(stream);
-            message = reader.ReadLine();
-            Console.WriteLine(message);
+                reader = new StreamReader(stream);
+                message = reader.ReadLine();
+                Console.WriteLine(message);
             }
         }
 
-        private static void SendMessage()
+        private void SendMessage()
         {
             Console.WriteLine("Введите сообщение");
             while (true)
             {
-                string message = "#mes" +";"+ userName+";";
-                message+= Console.ReadLine();
+                string message = "#mes" + ";" + userName + ";";
+                message += Console.ReadLine();
                 writer = new StreamWriter(stream);
                 writer.WriteLine(message);
                 writer.Flush();
             }
         }
 
-        private static bool ChekPass(string userPassword, string checkPassword)
+        private bool ChekPass(string userPassword, string checkPassword)
         {
             return userPassword == checkPassword;
         }
 
-        static void Disconnect()
+        void Disconnect()
         {
             if (stream != null)
                 stream.Close();

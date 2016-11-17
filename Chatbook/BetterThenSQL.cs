@@ -14,11 +14,15 @@ namespace Chatbook
         StreamWriter writer;
         FileStream fs;
         string info;
-        public BetterThenSQL(string name,string password)
+        public static Dictionary<string, string> dateClients = new Dictionary<string, string>();
+        
+        public BetterThenSQL() { }
+
+        public BetterThenSQL(string name, string password)
         {
-            if (f.Exists && !Server.cl.Any(x=>x.Key == name))
+            if (f.Exists && !dateClients.Any(x => x.Key == name))
             {
-                info = "#"+ name + ";" + password;
+                info = "#" + name + ";" + password;
                 writer = new StreamWriter(@"D:\Test.txt", true);
                 writer.WriteLine(info);
                 writer.Close();
@@ -28,7 +32,7 @@ namespace Chatbook
                 reader.Close();
 
             }
-            else if(!f.Exists)
+            else if (!f.Exists)
             {
                 fs = f.Create();
                 info = "#" + name + ";" + password;
@@ -41,6 +45,25 @@ namespace Chatbook
                 reader.Close();
                 fs.Close();
             }
+        }
+        internal void ReadFromBd()
+        {
+            try
+            {
+                int i = 0;
+                reader = new StreamReader(@"D:\Test.txt", true);
+                string test = reader.ReadToEnd();
+                foreach (string user in test.Split('#'))
+                {
+                    if (user != "")
+                    {
+                        dateClients.Add(user.Split(';')[0], user.Split(';')[1].TrimEnd());
+                    }
+                }
+                Console.WriteLine(test);
+                reader.Close();
+            }
+            catch { }
         }
     }
 }

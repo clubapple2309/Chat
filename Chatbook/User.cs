@@ -9,20 +9,20 @@ using System.IO;
 
 namespace Chatbook
 {
-    class User:Client
+    class User : Client
     {
         BetterThenSQL sql;
-       
-        public User (TcpClient client, Server server,string name, string password,StreamWriter writer,StreamReader reader) :base(client,server)
+
+        public User(TcpClient client, Server server, string name, string password, StreamWriter writer, StreamReader reader) : base(client, server)
         {
             Reader = reader;
             Writer = writer;
             Client = client;
-            Server = server; 
+            Server = server;
             Name = name;
             Password = password;
             Server.clients.Add(this);
-            sql = new BetterThenSQL(name,password);
+            sql = new BetterThenSQL(name, password);
         }
         public Server Server;
         public TcpClient Client;
